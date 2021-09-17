@@ -1,5 +1,7 @@
+using FluentValidation;
 using MediatR;
 using System.Reflection;
+using TaskApp.Behaviors;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,11 +12,14 @@ builder.Services.AddControllers();
 
 // Inject the mediator
 builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
+builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new() { Title = "TaskApp", Version = "v1" });
 });
+
 
 var app = builder.Build();
 

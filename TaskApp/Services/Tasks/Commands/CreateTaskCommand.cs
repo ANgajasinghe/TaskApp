@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 
 namespace TaskApp.Test
 {
@@ -16,7 +17,6 @@ namespace TaskApp.Test
     public class CreateTaskCommandHandler : IRequestHandler<CreateTaskCommand, int>
     {
 
-
         public async Task<int> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
         {
             if (request.Email != null)
@@ -25,6 +25,25 @@ namespace TaskApp.Test
             }
 
             return 0;
+        }
+    }
+
+    public class CreateTaskCommandValidatior : AbstractValidator<CreateTaskCommand>
+    {
+        public CreateTaskCommandValidatior()
+        {
+            RuleFor(v => v.Email)
+                .NotEmpty().WithMessage("Email is required.")
+                .EmailAddress().WithMessage("This is not a valid email address.")
+                .MaximumLength(200).WithMessage("Title must not exceed 200 characters.");
+
+            RuleFor(v => v.Name)
+                .NotEmpty().WithMessage("Name is required.")
+                .MaximumLength(200).WithMessage("Title must not exceed 200 characters.");
+
+            RuleFor(v => v.IsCompleated)
+                .Must(v => v == false).WithMessage("IsComppleated should be false");
+
         }
     }
 }
