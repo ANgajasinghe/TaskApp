@@ -1,5 +1,8 @@
 ﻿using MediatR;
 using Moq;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace TaskApp.Test;
@@ -20,7 +23,7 @@ public class TasksTest
         // Arrange
         CreateTaskCommand command = new()
         {
-            Id = 1,
+            Id = "sasa",
             Email = "ag.anayanajith@gmail.com",
             Name = "Some task",
             DueDate = DateTime.Now.AddDays(1),

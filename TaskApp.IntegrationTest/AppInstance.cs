@@ -3,9 +3,14 @@ using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Moq;
+using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 using TaskApp.Behaviors;
+using TaskApp.Models;
+using TaskApp.Persistence;
 
 namespace TaskApp.IntegrationTest
 {
@@ -34,11 +39,22 @@ namespace TaskApp.IntegrationTest
             services.AddMediatR(Assembly.LoadFrom("TaskApp"));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 
+            services.Configure<MongoDatabaseSettings>(configurations.GetSection(nameof(MongoDatabaseSettings)));
+            services.AddSingleton<IMongoDatabaseSettings>(sp => sp.GetRequiredService<IOptions<MongoDatabaseSettings>>().Value);
 
-
+            services.AddScoped<ITaskItemRepositoty, TaskItemRepositoty>();
 
             _scopeFactory = services.BuildServiceProvider().GetService<IServiceScopeFactory>();
 
+            ABC();
+
+
+        }
+
+        public void ABC()
+        {
+            using var scope = _scopeFactory.CreateScope();
+            var d = scope.ServiceProvider.GetService<ITaskItemRepositoty>();
         }
 
 

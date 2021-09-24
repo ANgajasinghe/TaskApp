@@ -1,11 +1,14 @@
 ﻿using FluentValidation;
 using MediatR;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace TaskApp.Test
 {
     public class CreateTaskCommand : IRequest<int>
     {
-        public int Id { get; set; }
+        public string? Id { get; set; }
         public string? Email { get; set; }
         public string? Name { get; set; }
         public DateTime DueDate { get; set; }
