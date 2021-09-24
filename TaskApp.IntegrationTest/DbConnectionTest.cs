@@ -13,7 +13,7 @@ public class DbConnectionTest : IClassFixture<AppInstance>
     public DbConnectionTest(AppInstance appInstance)
     {
         _appInstance = appInstance;
-        // _mongoDatabaseSettings = appInstance.Services.GetService<IMongoDatabaseSettings>();
+        _mongoDatabaseSettings = appInstance.MongoDatabaseSettings;
     }
 
     [Fact]

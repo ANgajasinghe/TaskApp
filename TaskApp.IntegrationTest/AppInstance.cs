@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Moq;
+using System;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -14,9 +15,12 @@ using TaskApp.Persistence;
 
 namespace TaskApp.IntegrationTest
 {
-    public class AppInstance
+    public class AppInstance 
     {
         private static IServiceScopeFactory _scopeFactory;
+        public ITaskItemRepositoty TaskItemRepositoty;
+        public IMongoDatabaseSettings MongoDatabaseSettings;
+
 
         public AppInstance()
         {
@@ -46,15 +50,16 @@ namespace TaskApp.IntegrationTest
 
             _scopeFactory = services.BuildServiceProvider().GetService<IServiceScopeFactory>();
 
-            ABC();
 
+            Initiate();
 
         }
 
-        public void ABC()
+        public void Initiate()
         {
             using var scope = _scopeFactory.CreateScope();
-            var d = scope.ServiceProvider.GetService<ITaskItemRepositoty>();
+            TaskItemRepositoty = scope.ServiceProvider.GetService<ITaskItemRepositoty>();
+            MongoDatabaseSettings = scope.ServiceProvider.GetService<IMongoDatabaseSettings>();
         }
 
 

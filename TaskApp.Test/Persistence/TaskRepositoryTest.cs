@@ -32,13 +32,13 @@ namespace TaskApp.Test.Persistence
                  }
             };
 
-            _taskRepositoryMock.Setup(x => x.GetTasksAsync()).ReturnsAsync(tasks);
-            var res = await _taskRepositoryMock.Object.GetTasksAsync();
+            _taskRepositoryMock.Setup(x => x.GetTaskItemsAsync()).ReturnsAsync(tasks);
+            var res = await _taskRepositoryMock.Object.GetTaskItemsAsync();
 
             Assert.NotNull(res);
             Assert.Single(res);
 
-            _taskRepositoryMock.Verify(x => x.GetTasksAsync());
+            _taskRepositoryMock.Verify(x => x.GetTaskItemsAsync());
 
 
         }
