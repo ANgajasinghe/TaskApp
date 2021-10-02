@@ -13,7 +13,7 @@ namespace TaskApp.Models
 
         public string Email { get; set; }
         public string Name { get; set; }
-        public DateTime DueDate { get; set; }
+        public DateTimeOffset DueDate { get; set; }
         public int Priority { get; set; }
         public bool IsCompleated { get; set; }
     }

@@ -1,17 +1,20 @@
-﻿using FluentValidation;
+﻿using AutoMapper;
+using FluentValidation;
 using MediatR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using TaskApp.Application.Mappings;
+using TaskApp.Models;
+using TaskApp.Persistence;
 
 namespace TaskApp.Test
 {
-    public class CreateTaskCommand : IRequest<int>
+    public class CreateTaskCommand : IRequest<int>, IMapTo<TaskItem>
     {
-        public string? Id { get; set; }
         public string? Email { get; set; }
         public string? Name { get; set; }
-        public DateTime DueDate { get; set; }
+        public DateTimeOffset DueDate { get; set; }
         public int Priority { get; set; }
         public bool IsCompleated { get; set; }
     }
@@ -19,15 +22,28 @@ namespace TaskApp.Test
 
     public class CreateTaskCommandHandler : IRequestHandler<CreateTaskCommand, int>
     {
+        private readonly ITaskItemRepositoty _taskItemRepositoty;
+        private readonly IMapper _mapper;
+
+        public CreateTaskCommandHandler(ITaskItemRepositoty taskItemRepositoty,IMapper mapper)
+        {
+            _taskItemRepositoty = taskItemRepositoty;
+            _mapper = mapper;
+        }
 
         public async Task<int> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
         {
-            if (request.Email != null)
+            try
             {
+                await _taskItemRepositoty.InsertTaskAsync(_mapper.Map<TaskItem>(request));
                 return 1;
             }
-
-            return 0;
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine(ex.Message);
+                throw;
+            }
+           
         }
     }
 
