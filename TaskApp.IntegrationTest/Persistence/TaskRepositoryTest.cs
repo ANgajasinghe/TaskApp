@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -36,12 +37,12 @@ namespace TaskApp.IntegrationTest
         [Fact]
         public async Task Insert_Task_Test()
         {
-           
-                // act
-                var task = await _appInstance.TaskItemRepositoty.InsertTaskAsync(TasksItems.First());
 
-                Assert.NotNull(task);
-                Assert.Equal("ag.nayanajith@gmail.com", task.Email);
+            // act
+            var task = await _appInstance.TaskItemRepositoty.InsertTaskAsync(TasksItems.First());
+
+            Assert.NotNull(task);
+            Assert.Equal("ag.nayanajith@gmail.com", task.Email);
         }
 
 
@@ -63,19 +64,23 @@ namespace TaskApp.IntegrationTest
 
 
         [Fact]
-        public async Task Get_Task_Item() 
+        public async Task Get_Task_Item()
         {
-            string id = "614daddea649706158b81d88";
+
+            await using var application = new TaskAppApplication();
+            using var client = application.CreateClient();
+
+            string id = "615972c3ce2f453b3a8e6231";
             TaskItem taskItem = await _appInstance.TaskItemRepositoty.GetTaskItemAsync(id);
 
             Assert.NotNull(taskItem);
         }
 
         [Fact]
-        public async Task Update_Task_Item() 
+        public async Task Update_Task_Item()
         {
             // Arrange
-            string id = "614daddea649706158b81d88";
+            string id = "615972c3ce2f453b3a8e6231";
             TaskItem taskItemIn = await _appInstance.TaskItemRepositoty.GetTaskItemAsync(id);
             taskItemIn.Name = "Akalanka Nayanajith";
 
@@ -84,13 +89,13 @@ namespace TaskApp.IntegrationTest
 
             //Assert
             Assert.NotNull(result);
-            
+
         }
 
-        public async Task Delete_Task_Item() 
+        public async Task Delete_Task_Item()
         {
             // Arrange
-            string id = "614daddea649706158b81d88";
+            string id = "615972c3ce2f453b3a8e6231";
 
             // Act
             await _appInstance.TaskItemRepositoty.DeleteAsync(id);
@@ -101,7 +106,7 @@ namespace TaskApp.IntegrationTest
 
         }
 
-       
+
 
 
     }

@@ -15,7 +15,7 @@ using TaskApp.Persistence;
 
 namespace TaskApp.IntegrationTest
 {
-    public class AppInstance 
+    public class AppInstance
     {
         private static IServiceScopeFactory _scopeFactory;
         public ITaskItemRepositoty TaskItemRepositoty;
