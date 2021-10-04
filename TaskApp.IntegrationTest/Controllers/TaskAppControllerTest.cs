@@ -15,9 +15,8 @@ namespace TaskApp.IntegrationTest.Controllers
     public class TaskAppControllerTest 
     {
 
-
         [Fact]
-        public async Task POST_Create_TaskItem_Reponds_OK() 
+        public async Task POST_Create_TaskItem_Reponds_CREATED() 
         {
 
             await using var application = new TaskAppApplication();
@@ -40,6 +39,19 @@ namespace TaskApp.IntegrationTest.Controllers
             using var response = await client.PostAsync("/api/TaskApp", jsonContent);
 
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task GET_TaskItem_Respods_OK() 
+        {
+            // arrange
+            await using var application = new TaskAppApplication();
+            using var client = application.CreateClient();
+            var response = await client.GetAsync("/api/TaskApp");
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(response.Content);
+
         }
     }
 }

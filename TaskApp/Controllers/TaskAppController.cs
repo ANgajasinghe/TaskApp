@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TaskApp.Services.Tasks.Queries;
 using TaskApp.Test;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -28,9 +29,10 @@ namespace TaskApp.Controllers
 
         // GET api/<TaskAppController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            var results = await Mediator.Send(new GetAllTasksQuery());
+            return Ok(results);
         }
 
         // POST api/<TaskAppController>
